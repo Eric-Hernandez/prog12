@@ -1,0 +1,117 @@
+0. Create package prog12 and install the four Java files.
+
+
+1. Examine the Browser and Google interfaces.  Write the Javadoc style
+   comments for the Browser methods and make sure it looks good in
+   Javadoc.  Read the Javadoc description of the Google interface and
+   make sure you understand it.
+
+
+2. Create your MyGoogle class which implements the Google interface.
+   First create empty implementations of gather and search.  search
+   can return a new String[0] for now.
+
+   In MyGoogle, create private variables pagesSeen, pageToIndex, and
+   refCounts, as described in the notes.
+
+   Then initialize them.  Add comments to describe them.
+
+
+3. Create a method indexPage(String url) which modifies the three
+   variables above to index a new page.  It's just one line for each,
+   but you need to understand what's going on to figure out the line.
+
+
+4. Next, create private variables to store wordsSeen, wordToIndex, and
+   pageIndexLists.  Initialize them.  Comments!
+
+
+5. Create a method indexWord(String word) which modifies the three
+   variables to index the new word.
+
+
+HOMEWORK DUE 11am Wednesday December 3
+
+6. Implement gather.  To start with, assume that each word appears at
+   most once on the page and each URL appears at most once on the
+   page.  For each URL, update its reference count.  For each word,
+   add the current page's index to the word's list.
+
+   a. Add a check to see if you have already added this page's index
+      to a word's list so you don't add it more than once if the word
+      appears more than once on the page.
+
+   b. To prevent incrementing a page's reference count more than once,
+      put the indices of the pages that you are going to increment
+      into a Set.  Once you have done this for all the references on
+      this page, iterate over the Set and increment each reference
+      count just once because a Set cannot have duplicates.  (Adding
+      an element twice to a Set doesn't cause a duplication.)
+
+
+LAB Wednesday December 3
+
+7. Create a PageComparator class that you can pass to the
+   PriorityQueue of matching page indices.  What type does it compare?
+
+
+8. In search, you need three variables
+
+    // Iterator into list of page ids for each key word.
+    Iterator<Integer>[] pageIndexIterators =
+      (Iterator<Integer>[]) new Iterator[keyWords.size()];
+    
+    // Current page index in each list, just ``behind'' the iterator.
+    int[] currentPageIndices;
+    
+    // LEAST popular page is at top of heap so if heap has numResults
+    // elements and the next match is better than the least popular page
+    // in the queue, the least popular page can be thrown away.
+
+    PriorityQueue<Integer> bestPageIndices;
+
+   Write a loop to initialize the entries of pageIndexIterators.  If any
+   of the words do not have an index ("sqrglwtzs"), what should you do?
+    
+
+9. Implement the following methods
+
+  /** If all the currentPageIndices are the same (because are just
+      starting or just found a match), move them all forward: call
+      next() for each page index iterator and put the result into
+      current page indices.
+
+      If they are not all the same, don't move the largest one(s)
+      forward.  (There may be more than one equal to the largest index
+      in current page indices.)
+
+      Return false if hasNext() is false for any iterator.
+
+      @param currentPageIndices array of current page indices
+      @param pageIndexIterators array of iterators with next page indices
+      @return true if all minimum page indices updates, false otherwise
+  */
+  private boolean moveForward
+    (int[] currentPageIndices, Iterator<Integer>[] pageIndexIterators) {
+
+
+  /** Check if all elements in an array are equal.
+      @param array an array of numbers
+      @return true if all are equal, false otherwise
+  */
+  private boolean allEqual (int[] array) {
+
+10. Implement the loop of search.  While moveForward is successful,
+    check if the entries of currentPageIndices are all equal.  If so, you
+    have a found a match, so save it in the queue.
+
+
+11. Create an array of String which will hold the results.  How big
+    should it be?
+
+    Unload the priority queue into the string.  But polling the queue
+    gives you the pages in reverse order from least significant to
+    most significant.  What should you do?
+    
+
+
